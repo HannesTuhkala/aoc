@@ -29,20 +29,20 @@ impl fmt::Display for Point2 {
 }
 
 #[derive(Debug)]
-pub struct Vec2 {
+pub struct LineSegment {
     pub p1: Point2,
     pub p2: Point2,
 }
 
-impl Vec2 {
+impl LineSegment {
     pub fn new(p1: Point2, p2: Point2) -> Self {
-        Vec2 {
+        LineSegment {
             p1,
             p2,
         }
     }
 
-    pub fn intersects(&mut self, v: Vec2) -> Option<Point2> {
+    pub fn intersects(&mut self, v: LineSegment) -> Option<Point2> {
         let a1 = self.p2.y - self.p1.y;
         let b1 = self.p1.x - self.p2.x;
         let c1 = a1 * self.p1.x + b1 * self.p1.y;
@@ -163,7 +163,7 @@ fn main() {
 
         let p1 = Point2::new(x1, y1);
         let p2 = Point2::new(x2, y2);
-        let mut v1 = Vec2::new(p1, p2);
+        let mut v1 = LineSegment::new(p1, p2);
 
         for (l, g) in &u2 {
             match l {
@@ -186,14 +186,10 @@ fn main() {
             
             let p3 = Point2::new(x3, y3);
             let p4 = Point2::new(x4, y4);
-            let v2 = Vec2::new(p3, p4);
+            let v2 = LineSegment::new(p3, p4);
 
-            match v1.intersects(v2) {
-                None => {
-                },
-                Some(x) => {
-                    v.push(x);
-                },
+            if let Some(x) = v1.intersects(v2) {
+                v.push(x);
             }
 
             x3 = x4;
@@ -205,7 +201,7 @@ fn main() {
 
     println!("{:?}", v);
 
-    let b: f32 = v.iter().fold(std::f32::INFINITY, |acc, x| {
+    let lowest: f32 = v.iter().fold(std::f32::INFINITY, |acc, x| {
         if acc <= x.get_manhattan_distance() {
             acc
         } else {
@@ -213,6 +209,6 @@ fn main() {
         }
     });
 
-    println!("Lowest manhattan distance is: {}", b);
+    println!("Lowest manhattan distance is: {}", lowest);
 }
 
