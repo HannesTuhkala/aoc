@@ -59,10 +59,6 @@ impl Vec2 {
             let p = Point2::new(x, y);
         
             if self.check(x, y) && v.check(x, y) && !(x == 0. && y == 0.) {
-                if p.get_manhattan_distance() > 95. && p.get_manhattan_distance() < 96. {
-                    println!("POINT P: {:?}", p);
-                    println!("Two line segments are: {:?}; {:?}", self, v);
-                }
                 return Some(p);
             }
         }
