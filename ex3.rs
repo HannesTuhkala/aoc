@@ -72,24 +72,23 @@ impl LineSegment {
     }
     
     pub fn max_x(&self) -> f32 {
-        let min = if self.p1.x >= self.p2.x {
+        let max = if self.p1.x >= self.p2.x {
             self.p1.x
         } else {
             self.p2.x
         };
 
-        min
+        max
     }
 
     pub fn max_y(&self) -> f32 {
-        let min = if self.p1.y >= self.p2.y {
+        let max = if self.p1.y >= self.p2.y {
             self.p1.y
         } else {
             self.p2.y
         };
 
-        min
-
+        max
     }
     
     pub fn min_x(&self) -> f32 {
@@ -139,19 +138,19 @@ fn main() {
     let (mut x1, mut y1) = (0., 0.);
     let (mut x2, mut y2) = (0., 0.);
     
-    for (u, d) in &u1 {
-        match u {
+    for (dir_1, step_1) in &u1 {
+        match dir_1 {
             'U' => {
-                y2 += d;
+                y2 += step_1;
             }, 
             'R' => {
-                x2 += d;
+                x2 += step_1;
             },
             'D' => {
-                y2 -= d;
+                y2 -= step_1;
             },
             'L' => {
-                x2 -= d;
+                x2 -= step_1;
             },
             _ => {
                 continue;
@@ -165,19 +164,19 @@ fn main() {
         let p2 = Point2::new(x2, y2);
         let mut v1 = LineSegment::new(p1, p2);
 
-        for (l, g) in &u2 {
-            match l {
+        for (dir_2, step_2) in &u2 {
+            match dir_2 {
                 'U' => {
-                    y4 += g;
+                    y4 += step_2;
                 },
                 'R' => {
-                    x4 += g;
+                    x4 += step_2;
                 },
                 'D' => {
-                    y4 -= g;
+                    y4 -= step_2;
                 },
                 'L' => {
-                    x4 -= g;
+                    x4 -= step_2;
                 },
                 _ => {
                     continue;
@@ -194,9 +193,10 @@ fn main() {
 
             x3 = x4;
             y3 = y4;
-            x1 = x2;
-            y1 = y2;
         }
+
+        x1 = x2;
+        y1 = y2;
     }
 
     println!("{:?}", v);
