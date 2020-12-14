@@ -43,7 +43,6 @@ std::vector<int> apply_mask_b(int address, std::string& mask) {
 		} else if (mask[i] == '1') {
 			string_address[i] = '1';
 		} else {
-			string_address[i] = 'X';
 			positions.push(i);
 		}
 	}
