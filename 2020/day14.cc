@@ -5,7 +5,9 @@
 #include <queue>
 #include <bitset>
 
-unsigned long long apply_mask_a(unsigned long long value, std::string& mask) {
+typedef unsigned long long ullong;
+
+ullong apply_mask_a(ullong value, std::string& mask) {
 	std::string string_value = std::bitset<36>(value).to_string();
 
 	for (int i{0}; i < 36; i++) {
@@ -17,7 +19,7 @@ unsigned long long apply_mask_a(unsigned long long value, std::string& mask) {
 	return std::bitset<36>(string_value).to_ullong();
 }
 
-void address_helper(std::vector<int>& addresses, std::queue<int> positions, std::string address) {
+void address_helper(std::vector<ullong>& addresses, std::queue<int> positions, std::string address) {
 	if (!positions.empty()) {
 		int position{positions.front()};
 		positions.pop();
@@ -28,13 +30,13 @@ void address_helper(std::vector<int>& addresses, std::queue<int> positions, std:
 		address[position] = '1';
 		address_helper(addresses, positions, address);
 	} else {
-		addresses.push_back(std::bitset<36>(address).to_ulong());
+		addresses.push_back(std::bitset<36>(address).to_ullong());
 	}
 }
 
-std::vector<int> apply_mask_b(int address, std::string& mask) {
+std::vector<ullong> apply_mask_b(ullong address, std::string& mask) {
 	std::string string_address = std::bitset<36>(address).to_string();
-	std::vector<int> addresses{};
+	std::vector<ullong> addresses{};
 	std::queue<int> positions{};
 
 	for (int i{0}; i < 36; i++) {
@@ -52,9 +54,9 @@ std::vector<int> apply_mask_b(int address, std::string& mask) {
 	return addresses;
 }
 
-unsigned long long sum(std::map<int, unsigned long long>& memory) {
-	unsigned long long result{0};
-	for (auto&& pair : memory) {
+ullong sum(std::map<ullong, ullong>& memory) {
+	ullong result{0};
+	for (std::pair<ullong, ullong>&& pair : memory) {
 		result += pair.second;
 	}
 
@@ -65,8 +67,8 @@ template<typename Function>
 void apply_mask(std::istream& source, Function f) {
 	std::string tempLine{};
 	std::string mask{};
-	int address{};
-	unsigned long long value{};
+	ullong address{};
+	ullong value{};
 
 	while (std::getline(source, tempLine)) {
 		if (tempLine.substr(0, 3) == "mas") {
@@ -86,22 +88,21 @@ void apply_mask(std::istream& source, Function f) {
 
 int main() {
 	std::ifstream source{"input14.txt"};
-	std::map<int, unsigned long long> memory{};
+	std::map<ullong, ullong> memory_a{};
+	std::map<ullong, ullong> memory_b{};
 
-	apply_mask(source, [&memory](int address, unsigned long long value, std::string mask) -> void {
-				memory[address] = apply_mask_a(value, mask);
+	apply_mask(source, [&memory_a](ullong address, ullong value, std::string mask) -> void {
+				memory_a[address] = apply_mask_a(value, mask);
 	});
 
-	std::cout << "The answer to part a) is: " << sum(memory) << std::endl;
+	std::cout << "The answer to part a) is: " << sum(memory_a) << std::endl;
 
-	memory.clear();
-
-	apply_mask(source, [&memory](int address, unsigned long long value, std::string mask) -> void {
-				std::vector<int> addresses = apply_mask_b(address, mask);
-				for (int address : addresses) {
-					memory[address] = value;
+	apply_mask(source, [&memory_b](ullong address, ullong value, std::string mask) -> void {
+				std::vector<ullong> addresses = apply_mask_b(address, mask);
+				for (ullong address : addresses) {
+					memory_b[address] = value;
 				}
 	});
 
-	std::cout << "The answer to part b) is: " << sum(memory) << std::endl;
+	std::cout << "The answer to part b) is: " << sum(memory_b) << std::endl;
 }
