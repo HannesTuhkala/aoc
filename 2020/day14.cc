@@ -3,7 +3,7 @@
 #include <map>
 #include <bitset>
 
-std::string apply_mask(int value, std::string& mask) {
+std::string apply_mask(unsigned long long value, std::string& mask) {
 	std::string string_value = std::bitset<36>(value).to_string();
 
 	for (int i{0}; i < 36; i++) {
@@ -21,7 +21,7 @@ int main() {
 	std::string tempLine{};
 	std::string mask{};
 	int address{};
-	int value{};
+	unsigned long long value{};
 
 	while (std::getline(source, tempLine)) {
 		if (tempLine.substr(0, 3) == "mas") {
@@ -29,7 +29,7 @@ int main() {
 		} else {
 			address = stoi(tempLine.substr(4, tempLine.find(']', 4) - 4));
 			value = stoi(tempLine.substr(tempLine.find("= ", 6) + 2, std::string::npos));
-			memory.insert({address, apply_mask(value, mask)});
+			memory[address] = apply_mask(value, mask);
 		}
 	}
 
