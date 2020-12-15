@@ -1,5 +1,4 @@
 #include <iostream>
-#include <chrono>
 
 int main() {
 	int input[]{6, 13, 1, 15, 2, 0};
