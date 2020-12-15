@@ -1,19 +1,21 @@
 #include <iostream>
 
+const int turns_a{2020};
+const int turns_b{30000000};
+
 int main() {
 	int input[]{6, 13, 1, 15, 2, 0};
 
-	static int memory[30000000]{};
+	static int memory[turns_b]{};
 	int turn{1};
 
-	for (int i{0}; i < 6; i++) {
-		memory[input[i]] = turn;
-		turn++;
+	for (; turn < std::size(input); turn++) {
+		memory[input[turn - 1]] = turn;
 	}
 
 	int current_number{0};
 
-	for (; turn < 30000000; turn++) {
+	for (; turn < turns_b; turn++) {
 		if (memory[current_number] == 0) {
 			memory[current_number] = turn;
 			current_number = 0;
